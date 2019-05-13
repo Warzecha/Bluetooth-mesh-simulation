@@ -1,11 +1,7 @@
 let nodes = [];
 let connections = [];
+let walls = [];
 
-const classToRange = {
-	1: 300,
-	2: 200,
-	3: 100
-}
 
 
 let time;
@@ -14,6 +10,10 @@ function setup() {
 	createCanvas(windowWidth, windowHeight);
 
 	time = 0.0;
+
+	// append(walls, new Wall(createVector(100, 100), createVector(600, 100), 1))
+	// append(walls, new Wall(createVector(100, 200), createVector(600, 200), 2))
+	append(walls, new Wall(createVector(100, 300), createVector(600, 300), 3))
 
 
 	for (let i = 0; i < STATIC_NODE_COUNT; i++) {
@@ -30,6 +30,14 @@ function setup() {
 		append(nodes, new Node(x, y, 1, true));
 	}
 
+
+
+	for (let i = 0; i < nodes.length; i++) {
+		for (let j = i + 1; j < nodes.length; j++) {
+			append(connections, new Connection(nodes[i], nodes[j]));
+		}
+	}
+
 }
 
 function draw() {
@@ -40,29 +48,19 @@ function draw() {
 		node.show();
 	});
 
-	connections = [];
-
-	for (let i = 0; i < nodes.length; i++) {
-		for (let j = i + 1; j < nodes.length; j++) {
-
-			let node1Pos = nodes[i].getPositionVector(); 
-			let node2Pos = nodes[j].getPositionVector(); 
-
-			let node1class = nodes[i].bluetoothClass;
-
-			let maxRange = classToRange[node1class]
-
-			if(node1Pos.dist(node2Pos) < maxRange) {
-				append(connections, new Connection(node1Pos, node2Pos));
-			}
-
-		}
-	}
+	walls.forEach(wall => {
+		wall.show();
+	})
 
 	connections.forEach(connection => {
+		walls.forEach(w => {
+			connection.updateIntersection(w);
+		})
 		connection.show();
 	});
 
 
 	time += 0.01;
+
+	console.log(connections.length)
 }
