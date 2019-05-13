@@ -1,9 +1,8 @@
-
 const classToRange = {
     1: 300,
     2: 200,
     3: 100
-}
+};
 
 class Connection {
 
@@ -11,8 +10,6 @@ class Connection {
 
         this.n1 = n1;
         this.n2 = n2;
-
-        // let node1class = nodes[i].bluetoothClass;
         this.maxRange = Math.min(classToRange[n1.bluetoothClass], classToRange[n2.bluetoothClass]);
         this.intersected = false;
 
@@ -27,7 +24,8 @@ class Connection {
                 stroke(255);
             }
             strokeWeight(1);
-            line(this.n1.x, this.n1.y, this.n2.x, this.n2.y)
+            let linePoints = this.calculateLinePoints();
+            line(linePoints[0], linePoints[1], linePoints[2], linePoints[3])
         }
     }
 
@@ -44,8 +42,41 @@ class Connection {
     }
 
     updateIntersection(wall) {
-        let intersection = this.checkIntersection(wall);
-        this.intersected = intersection;
+        this.intersected = this.checkIntersection(wall);
+    }
+
+
+    calculateLinePoints() {
+        let horizontalDistance = Math.abs(this.n1.x - this.n2.x);
+        let verticalDistance = Math.abs(this.n1.y - this.n2.y);
+
+        let sinus = verticalDistance / Math.sqrt(Math.pow(horizontalDistance, 2) + Math.pow(verticalDistance, 2));
+
+        let yCorrection = 15 * sinus;
+        let xCorrection = 15 * Math.sqrt(1 - Math.pow(sinus, 2));
+
+        let nX1 = 0;
+        let nY1 = 0;
+        let nX2 = 0;
+        let nY2 = 0;
+
+        if (this.n1.x < this.n2.x) {
+            nX1 = this.n1.x + xCorrection;
+            nX2 = this.n2.x - xCorrection;
+        } else {
+            nX1 = this.n1.x - xCorrection;
+            nX2 = this.n2.x + xCorrection;
+        }
+
+        if (this.n1.y < this.n2.y) {
+            nY1 = this.n1.y + yCorrection;
+            nY2 = this.n2.y - yCorrection;
+        } else {
+            nY1 = this.n1.y - yCorrection;
+            nY2 = this.n2.y + yCorrection;
+        }
+
+        return [nX1, nY1, nX2, nY2];
     }
 
 }

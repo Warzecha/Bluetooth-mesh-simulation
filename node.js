@@ -6,8 +6,8 @@ class Node {
         this.bluetoothClass = bluetoothClass;
         this.mobile = mobile;
 
-        if(mobile) {
-            this.maxSpeed = 2;
+        if (mobile) {
+            this.maxSpeed = 1.2;
             this.direction = p5.Vector.random2D().normalize().mult(this.maxSpeed)
         } else {
             this.maxSpeed = 0;
@@ -19,18 +19,23 @@ class Node {
     show() {
         strokeWeight(1);
         fill(255);
+        stroke(255, 255, 255);
         ellipse(this.x, this.y, 30);
+        textSize(22);
+        fill(0, 0, 0);
+        textAlign(CENTER, CENTER);
+        text(this.bluetoothClass.toString(), this.x, this.y);
     }
 
-    
-    moveRandomly(time) {
-        const maxAngleChange = 0.1 * PI
-        let angleDelta = random(- maxAngleChange, maxAngleChange);
+
+    moveRandomly() {
+        const maxAngleChange = 0.1 * PI;
+        let angleDelta = random(-maxAngleChange, maxAngleChange);
 
         this.direction.rotate(angleDelta);
-        const speedDelta = random(-0.1, 1)
+        const speedDelta = random(-0.1, 1);
 
-        let newSpeed = constrain(this.direction.mag() + speedDelta, 0, this.maxSpeed)
+        let newSpeed = constrain(this.direction.mag() + speedDelta, 0, this.maxSpeed);
         this.direction.setMag(newSpeed);
 
         this.x += this.direction.x;
