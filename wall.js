@@ -3,7 +3,6 @@ class Wall {
     constructor(p1, p2, wallClass) {
         this.p1 = p1;
         this.p2 = p2;
-
         this.wallClass = wallClass;
 
     }
@@ -23,7 +22,7 @@ class Wall {
                 console.log("Unknown wall class");
                 stroke(255);
         }
-        strokeWeight(6)
-        line(this.p1.x, this.p1.y, this.p2.x, this.p2.y)
+        strokeWeight(6);
+        line(this.p1.x, this.p1.y, this.p2.x, this.p2.y);
     }
 }
