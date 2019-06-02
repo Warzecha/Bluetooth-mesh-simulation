@@ -1,18 +1,26 @@
 class Wave {
 
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor(x, y, id, ttl) {
+        this.center = createVector(x, y);
         this.i = 0;
-        this.secondCircleDelay = -30;
-        this.thirdCircleDelay = -60;
         this.moveF = true;
-        this.moveS = true;
-        this.moveT = true;
         this.maxRadius = 300;
         this.toDelete = false;
         this.intersection = false;
 
+        this.id = id;
+
+        this.ttl = ttl;
+
+        this.distance = 100;
+    }
+
+    getRelayedCopy() {
+        return new Wave(this.pos.x, this.pos.y, this.id, this.ttl-1)
+    }
+
+    static createWave(x, y) {
+        return new Wave(x, y, Math.random(1000), this.ttl-1)
     }
 
     show(walls) {
@@ -21,12 +29,12 @@ class Wave {
         strokeWeight(1.5);
         if (!this.intersection) {
             walls.forEach(wall => {
-                let nominator = Math.abs((wall.p2.y - wall.p1.y) * this.x - (wall.p2.x - wall.p1.x) * this.y + wall.p2.x * wall.p1.y - wall.p2.y * wall.p1.x);
+                let nominator = Math.abs((wall.p2.y - wall.p1.y) * this.center.x - (wall.p2.x - wall.p1.x) * this.center.y + wall.p2.x * wall.p1.y - wall.p2.y * wall.p1.x);
                 let denominator = Math.sqrt(Math.pow((wall.p2.y - wall.p1.y), 2) + Math.pow((wall.p2.x - wall.p1.x), 2));
 
-                let distance = nominator / denominator;
+                this.distance = nominator / denominator;
 
-                if (this.i >= 2 * distance) {
+                if (this.i >= 2 * this.distance) {
                     this.maxRadius = this.i;
                     this.intersection = true;
                 }
@@ -39,37 +47,13 @@ class Wave {
         } else stroke(255);
 
 
-        ellipse(this.x, this.y, this.i, this.i);
-
-        if (this.secondCircleDelay >= 0) {
-            ellipse(this.x, this.y, this.secondCircleDelay, this.secondCircleDelay);
-        }
-
-        if (this.thirdCircleDelay >= 0) {
-            ellipse(this.x, this.y, this.thirdCircleDelay, this.thirdCircleDelay);
-        }
+        ellipse(this.center.x, this.center.y, this.i, this.i);
 
         if (this.moveF) {
             this.i += 1;
             if (this.i >= this.maxRadius) {
                 this.i = 0;
                 this.moveF = false;
-            }
-        }
-
-        if (this.moveS) {
-            this.secondCircleDelay += 1;
-            if (this.secondCircleDelay >= this.maxRadius) {
-                this.secondCircleDelay = -30;
-                this.moveS = false;
-            }
-        }
-
-        if (this.moveT) {
-            this.thirdCircleDelay += 1;
-            if (this.thirdCircleDelay >= this.maxRadius) {
-                this.thirdCircleDelay = -60;
-                this.moveT = false;
             }
         }
 
