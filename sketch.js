@@ -11,12 +11,13 @@ function setup() {
 
 
         //  USED FOR TESTING
-        append(nodes, new Node(14, 5, 1, false));
-        append(nodes, new Node(14, 10, 1, false));
-        append(nodes, new Node(14, 15, 1, false));
-        append(nodes, new Node(14, 20, 1, false));
-        append(nodes, new Node(14, 25, 1, false));
-        append(nodes, new Node(14, 30, 1, false));
+        // append(nodes, new Node(14, 5, 1, false));
+        // append(nodes, new Node(14, 10, 1, false));
+        // append(nodes, new Node(14, 15, 1, false));
+        // append(nodes, new Node(14, 20, 1, false));
+        // append(nodes, new Node(14, 25, 1, false));
+        append(nodes, new Node(3, 20, 1, false));
+        append(nodes, new Node(13, 20, 1, false));
 
 
     // for (let i = 0; i < STATIC_NODE_COUNT; i++) {
