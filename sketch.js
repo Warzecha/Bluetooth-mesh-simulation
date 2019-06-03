@@ -16,26 +16,26 @@ function setup() {
 
 
         //  USED FOR TESTING
-        append(nodes, new Node(300, 300, 1, false));
-        append(nodes, new Node(300, 400, 1, false));
+        // append(nodes, new Node(300, 300, 1, false));
+        // append(nodes, new Node(300, 400, 1, false));
 
-    // for (let i = 0; i < STATIC_NODE_COUNT; i++) {
-    //     const x = random(0, windowWidth);
-    //     const y = random(0, windowHeight);
+    for (let i = 0; i < STATIC_NODE_COUNT; i++) {
+        const x = random(0, windowWidth);
+        const y = random(0, windowHeight);
 
     
-    //     append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), false));
-    // }
+        append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), false));
+    }
 
 
 
 
-    // for (let i = 0; i < MOBILE_NODE_COUNT; i++) {
-    //     const x = random(0, windowWidth);
-    //     const y = random(0, windowHeight);
+    for (let i = 0; i < MOBILE_NODE_COUNT; i++) {
+        const x = random(0, windowWidth);
+        const y = random(0, windowHeight);
 
-    //     append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), true));
-    // }
+        append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), true));
+    }
 
 
     // for (let i = 0; i < nodes.length; i++) {
@@ -60,7 +60,7 @@ function draw() {
         node.moveRandomly(walls);
         node.show();
         node.update();
-        node.relay(waves);
+        node.processWaves(waves);
         node.resendPrevMsg();
     });
 
@@ -85,4 +85,5 @@ function mouseClicked() {
     let randomNode = nodes[randomIndex];
     randomNode.sendNewWave(waves);
 
+    console.log(Node.count)
   }

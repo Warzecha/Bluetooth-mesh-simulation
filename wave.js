@@ -1,6 +1,6 @@
 class Wave {
 
-    constructor(x, y, id, ttl) {
+    constructor(x, y, id, ttl, targetId) {
         this.center = createVector(x, y);
         this.i = 0;
         this.moveF = true;
@@ -11,6 +11,12 @@ class Wave {
         this.id = id;
 
         this.ttl = ttl;
+
+        if (typeof targetId === 'undefined') {
+            targetId = Math.floor(Math.random()*Node.count);
+        }
+
+        this.targetId = targetId;
 
         this.distance = 100;
     }
@@ -24,7 +30,7 @@ class Wave {
         if (typeof id === 'undefined') {
             id = Math.floor(Math.random() * 1000000);
         }
-        return new Wave(x, y, id, 4)
+        return new Wave(x, y, id, 40)
     }
 
     show(walls) {

@@ -1,6 +1,10 @@
 class Node {
 
+
     constructor(x, y, bluetoothClass, mobile) {
+
+        this.id = Node.count++;
+
         this.pos = createVector(x, y);
         this.bluetoothClass = bluetoothClass;
         this.mobile = mobile;
@@ -23,6 +27,8 @@ class Node {
         this.currentMsgId = -1;
 
         this.nextResendIn = 0;
+
+        this.consumedMessages = new Set();
 
     }
 
@@ -85,25 +91,45 @@ class Node {
         return this.pos;
     }
 
-    relay(waves) {
+    processWaves(waves) {
+
+        waves.forEach(wave => {
 
 
-        if (this.isRelay && this.freeze == 0) {
+            if (Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 10) {
 
-            waves.forEach(wave => {
+                if (wave.targetId == this.id) {
 
-                // console.log("relay: ", Math.abs(this.pos.dist(wave.center)))
-                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 2) {
-
-                    if (!this.queue.contains(wave.id)) {
-                        this.sendWave(waves, wave);
+                    if(!this.consumedMessages.has(wave.id)) {
+                        // console.log("wave: ", wave.id)
+                        // console.log("wave target: ", wave.targetId)
+                        // console.log("node: ", this.id)
+                        console.log("RECEIVED!")
+                        this.consumedMessages.add(wave.id)
                     }
 
+                    return;
                 }
 
-            });
 
-        }
+
+
+                if (this.isRelay && this.freeze == 0) {
+
+
+                    if (wave.ttl > 0) {
+
+                        if (!this.queue.contains(wave.id)) {
+                            this.sendWave(waves, wave);
+                        }
+
+                    }
+                }
+            }
+
+        });
+
+
     }
 
     sendWave(waves, toSend) {
@@ -138,3 +164,5 @@ class Node {
     }
 
 }
+
+Node.count = 0;
