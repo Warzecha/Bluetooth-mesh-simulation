@@ -25,16 +25,24 @@ class Node {
         this.maxResendCount = 2;
         this.currentResendCount = 0;
         this.currentMsgId = -1;
+        this.currentMsgTarget = -1;
 
         this.nextResendIn = 0;
 
         this.consumedMessages = new Set();
 
+        this.showSender = 0;
+
     }
 
     show() {
         strokeWeight(1);
-        fill(255);
+
+        if(Node.receivers.has(this.id)) {
+            fill(255, 100, 100);
+        } else {
+            fill(255);
+        }
         stroke(255, 255, 255);
         ellipse(this.pos.x, this.pos.y, 30);
         textSize(22);
@@ -137,15 +145,17 @@ class Node {
 
         this.queue.push(toSend.id)
 
-        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1))
+        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId))
 
         return toSend.id;
     }
 
     sendNewWave(waves) {
-        let id = this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y));
+        this.currentMsgTarget =  Math.floor(Math.random()*Node.count);
+        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, 4, this.currentMsgTarget));
 
         this.currentMsgId = id;
+
 
         this.nextResendIn = Math.floor(Math.random() * 100);
     }
@@ -154,7 +164,7 @@ class Node {
 
         if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
 
-            this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y, this.currentMsgId))
+            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, 4, this.currentMsgTarget))
 
             this.nextResendIn = Math.floor(Math.random() * 1000);
             this.currentResendCount += 1;
@@ -166,3 +176,5 @@ class Node {
 }
 
 Node.count = 0;
+
+Node.receivers = new Set();

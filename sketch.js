@@ -85,5 +85,5 @@ function mouseClicked() {
     let randomNode = nodes[randomIndex];
     randomNode.sendNewWave(waves);
 
-    console.log(Node.count)
+    console.log(Node.receivers)
   }

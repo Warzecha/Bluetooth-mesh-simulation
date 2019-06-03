@@ -12,26 +12,32 @@ class Wave {
 
         this.ttl = ttl;
 
+        if (typeof id === 'undefined') {
+            id = Math.floor(Math.random() * 1000000);
+        }
+
         if (typeof targetId === 'undefined') {
             targetId = Math.floor(Math.random()*Node.count);
         }
+
+        Node.receivers.add(targetId);
 
         this.targetId = targetId;
 
         this.distance = 100;
     }
 
-    getRelayedCopy() {
-        return new Wave(this.pos.x, this.pos.y, this.id, this.ttl-1)
-    }
+    // getRelayedCopy() {
+    //     return new Wave(this.pos.x, this.pos.y, this.id, this.ttl-1, this.targetId)
+    // }
 
-    static createWave(x, y, id) {
+    // static createWave(x, y, id) {
 
-        if (typeof id === 'undefined') {
-            id = Math.floor(Math.random() * 1000000);
-        }
-        return new Wave(x, y, id, 40)
-    }
+    //     if (typeof id === 'undefined') {
+    //         id = Math.floor(Math.random() * 1000000);
+    //     }
+    //     return new Wave(x, y, id, 40)
+    // }
 
     show(walls) {
 
@@ -67,7 +73,7 @@ class Wave {
             }
         }
 
-        if (!this.moveF && !this.moveS && !this.moveT) {
+        if (!this.moveF) {
             this.toDelete = true;
         }
     }
