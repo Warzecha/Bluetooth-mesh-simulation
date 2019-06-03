@@ -2,14 +2,19 @@ class Wave {
 
     constructor(x, y, id, ttl, targetId) {
         this.center = createVector(x, y);
-        this.i = 0;
+
+        this.points = [];
+
+        for (let i = 0; i < WAVE_ANGULAR_RES; i++) {
+            append(this.points, createVector(x, y))
+
+        }
+
         this.moveF = true;
         this.maxRadius = 24;
         this.toDelete = false;
-        this.intersection = false;
 
         this.id = id;
-
         this.ttl = ttl;
 
         if (typeof id === 'undefined') {
@@ -17,50 +22,105 @@ class Wave {
         }
 
         if (typeof targetId === 'undefined') {
-            targetId = Math.floor(Math.random()*Node.count);
+            targetId = Math.floor(Math.random() * Node.count);
         }
 
         this.targetId = targetId;
-
         this.distance = 24;
     }
 
     show(walls) {
 
+        let propagates = false;
         noFill();
         strokeWeight(1.5);
-        if (!this.intersection) {
-            walls.forEach(wall => {
-                let nominator = Math.abs((wall.p2.y - wall.p1.y) * this.center.x - (wall.p2.x - wall.p1.x) * this.center.y + wall.p2.x * wall.p1.y - wall.p2.y * wall.p1.x);
-                let denominator = Math.sqrt(Math.pow((wall.p2.y - wall.p1.y), 2) + Math.pow((wall.p2.x - wall.p1.x), 2));
+        walls.forEach(wall => {
 
-                this.distance = nominator / denominator;
-
-                if (this.i >= 2 * this.distance) {
-                    this.maxRadius = this.i;
-                    this.intersection = true;
+            for (let i = 0; i < this.points.length; i++) {
+                let point = this.points[i];
+                let intersects = this.intersectsWall(this.center, point, wall);
+                let max = this.maxRadius;
+                if (intersects) {
+                    max /= 12;
                 }
 
-            });
-        }
+                let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, 0.1);
+
+
+                if (this.center.dist(point) < max) {
+                    point.add(propagationDirection)
+                    propagates = true;
+                }
+            }
+
+        });
 
         if (this.intersection) {
             stroke(238, 244, 66);
         } else stroke(255);
 
+        beginShape();
+        this.points.forEach(point => {
+            vertex(point.x * PIXELS_PER_METER, point.y * PIXELS_PER_METER);
 
-        ellipse(this.center.x * PIXELS_PER_METER, this.center.y * PIXELS_PER_METER, this.i * PIXELS_PER_METER, this.i * PIXELS_PER_METER);
+        });
 
-        if (this.moveF) {
-            this.i += 0.1;
-            if (this.i >= this.maxRadius) {
-                this.i = 0;
-                this.moveF = false;
-            }
-        }
+        endShape(CLOSE);
 
-        if (!this.moveF) {
+        if (!propagates) {
             this.toDelete = true;
         }
     }
+
+    intersects(pos) {
+        let x = pos.x, y = pos.y;
+        let intersections = 0;
+        let ss;
+
+        for (let i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
+
+            let xi = this.points[i].x, yi = this.points[i].y; let xj = this.points[j].x, yj = this.points[j].y;
+
+            if (yj == yi && yj == y && x > Math.min(xj, xi) && x < Math.max(xj, xi)) { // Check if point is on an horizontal polygon boundary
+                return true;
+            }
+
+            if (y > Math.min(yj, yi) && y <= Math.max(yj, yi) && x <= Math.max(xj, xi) && yj != yi) {
+
+                ss = (y - yj) * (xi - xj) / (yi - yj) + xj;
+
+                if (ss == x) {
+                    return true;
+                }
+
+                if (xj == xi || x <= ss) {
+
+                    intersections++;
+                }
+            }
+        }
+
+        if (intersections % 2 != 0) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
+    intersectsWall(center, end, wall) {
+        let det, gamma, lambda;
+        det = (end.x - center.x) * (wall.p2.y - wall.p1.y) - (wall.p2.x - wall.p1.x) * (end.y - center.y);
+        if (det === 0) {
+            return false;
+        } else {
+            lambda = ((wall.p2.y - wall.p1.y) * (wall.p2.x - center.x) + (wall.p1.x - wall.p2.x) * (wall.p2.y - center.y)) / det;
+            gamma = ((center.y - end.y) * (wall.p2.x - center.x) + (end.x - center.x) * (wall.p2.y - center.y)) / det;
+            return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+        }
+    };
+
 }

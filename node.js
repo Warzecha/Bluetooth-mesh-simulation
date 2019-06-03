@@ -1,6 +1,5 @@
 class Node {
 
-
     constructor(x, y, bluetoothClass, mobile) {
 
         this.id = Node.count++;
@@ -104,14 +103,12 @@ class Node {
         waves.forEach(wave => {
 
 
-            if (Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 0.1) {
+            if (wave.intersects(this.pos)) {
 
                 if (wave.targetId == this.id) {
 
                     if(!this.consumedMessages.has(wave.id)) {
-                        // console.log("wave: ", wave.id)
-                        // console.log("wave target: ", wave.targetId)
-                        // console.log("node: ", this.id)
+
                         console.log("RECEIVED!")
                         this.consumedMessages.add(wave.id)
                         Node.receivers.delete(wave.targetId)
@@ -119,9 +116,6 @@ class Node {
 
                     return;
                 }
-
-
-
 
                 if (this.isRelay && this.freeze == 0) {
 

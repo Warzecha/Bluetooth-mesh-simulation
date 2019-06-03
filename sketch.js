@@ -77,6 +77,7 @@ function setup() {
     append(nodes, new Node(14, 30, 1, false));
 
 
+
     // for (let i = 0; i < STATIC_NODE_COUNT; i++) {
     //     const x = random(2, WIDTH-1);
     //     const y = random(2, HEIGHT-1);
