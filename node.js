@@ -1,10 +1,12 @@
 class Node {
 
     constructor(x, y, bluetoothClass, mobile) {
-        this.x = x;
-        this.y = y;
+        this.pos = createVector(x, y);
         this.bluetoothClass = bluetoothClass;
         this.mobile = mobile;
+
+        this.isRelay = true;
+        this.queue = new Queue(10);
 
         if (mobile) {
             this.maxSpeed = 0.5;
@@ -14,17 +16,26 @@ class Node {
             this.direction = createVector(0, 0);
         }
 
+        this.freeze = 0;
+
+        this.maxResendCount = 2;
+        this.currentResendCount = 0;
+        this.currentMsgId = -1;
+
+        this.nextResendIn = 0;
+
     }
 
     show() {
         strokeWeight(1);
         fill(255);
         stroke(255, 255, 255);
-        ellipse(this.x, this.y, 30);
+        ellipse(this.pos.x, this.pos.y, 30);
         textSize(22);
         fill(0, 0, 0);
         textAlign(CENTER, CENTER);
-        text(this.bluetoothClass.toString(), this.x, this.y);
+        text(this.bluetoothClass.toString(), this.pos.x, this.pos.y);
+
     }
 
 
@@ -40,8 +51,8 @@ class Node {
 
         let moveNow = true;
         walls.forEach(wall => {
-            let tempX = this.x + this.direction.x;
-            let tempY = this.y + this.direction.y;
+            let tempX = this.pos.x + this.direction.x;
+            let tempY = this.pos.y + this.direction.y;
             let nominator = Math.abs((wall.p2.y - wall.p1.y) * tempX - (wall.p2.x - wall.p1.x) * tempY + wall.p2.x * wall.p1.y - wall.p2.y * wall.p1.x);
             let denominator = Math.sqrt(Math.pow((wall.p2.y - wall.p1.y), 2) + Math.pow((wall.p2.x - wall.p1.x), 2));
 
@@ -54,17 +65,76 @@ class Node {
         });
 
         if (moveNow) {
-            this.x += this.direction.x;
-            this.y += this.direction.y;
+            this.pos.x += this.direction.x;
+            this.pos.y += this.direction.y;
         }
 
-        this.x = constrain(this.x, 0, windowWidth);
-        this.y = constrain(this.y, 0, windowHeight);
+        this.pos.x = constrain(this.pos.x, 0, windowWidth);
+        this.pos.y = constrain(this.pos.y, 0, windowHeight);
+
+    }
+
+    update() {
+
+        this.freeze = Math.max(0, this.freeze - 1);
+        this.nextResendIn = Math.max(0, this.nextResendIn - 1);
 
     }
 
     getPositionVector() {
-        return createVector(this.x, this.y);
+        return this.pos;
+    }
+
+    relay(waves) {
+
+
+        if (this.isRelay && this.freeze == 0) {
+
+            waves.forEach(wave => {
+
+                // console.log("relay: ", Math.abs(this.pos.dist(wave.center)))
+                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 2) {
+
+                    if (!this.queue.contains(wave.id)) {
+                        this.sendWave(waves, wave);
+                    }
+
+                }
+
+            });
+
+        }
+    }
+
+    sendWave(waves, toSend) {
+        this.freeze = 3;
+
+        this.queue.push(toSend.id)
+
+        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1))
+
+        return toSend.id;
+    }
+
+    sendNewWave(waves) {
+        let id = this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y));
+
+        this.currentMsgId = id;
+
+        this.nextResendIn = Math.floor(Math.random() * 100);
+    }
+
+    resendPrevMsg() {
+
+        if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
+
+            this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y, this.currentMsgId))
+
+            this.nextResendIn = Math.floor(Math.random() * 1000);
+            this.currentResendCount += 1;
+
+        }
+
     }
 
 }

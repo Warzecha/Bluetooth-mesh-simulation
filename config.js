@@ -1,4 +1,4 @@
 const MAX_DIST = 100;
 
-const STATIC_NODE_COUNT = 0;
-const MOBILE_NODE_COUNT = 50;
+const STATIC_NODE_COUNT = 40;
+const MOBILE_NODE_COUNT = 20;
