@@ -61,6 +61,7 @@ function draw() {
         node.show();
         node.update();
         node.relay(waves);
+        node.resendPrevMsg();
     });
 
     walls.forEach(wall => {

@@ -19,9 +19,11 @@ class Wave {
         return new Wave(this.pos.x, this.pos.y, this.id, this.ttl-1)
     }
 
-    static createWave(x, y) {
+    static createWave(x, y, id) {
 
-        const id = Math.floor(Math.random() * 1000000);
+        if (typeof id === 'undefined') {
+            id = Math.floor(Math.random() * 1000000);
+        }
         return new Wave(x, y, id, 4)
     }
 

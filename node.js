@@ -18,6 +18,12 @@ class Node {
 
         this.freeze = 0;
 
+        this.maxResendCount = 2;
+        this.currentResendCount = 0;
+        this.currentMsgId = -1;
+
+        this.nextResendIn = 0;
+
     }
 
     show() {
@@ -71,6 +77,7 @@ class Node {
     update() {
 
         this.freeze = Math.max(0, this.freeze - 1);
+        this.nextResendIn = Math.max(0, this.nextResendIn - 1);
 
     }
 
@@ -80,14 +87,13 @@ class Node {
 
     relay(waves) {
 
-        
+
         if (this.isRelay && this.freeze == 0) {
-            
+
             waves.forEach(wave => {
-                
+
                 // console.log("relay: ", Math.abs(this.pos.dist(wave.center)))
-                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - wave.i)  <= 4) {
-                    
+                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 2) {
 
                     if (!this.queue.contains(wave.id)) {
                         this.sendWave(waves, wave);
@@ -101,15 +107,34 @@ class Node {
     }
 
     sendWave(waves, toSend) {
-        this.freeze = 30;
+        this.freeze = 3;
 
         this.queue.push(toSend.id)
 
         append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1))
+
+        return toSend.id;
     }
 
     sendNewWave(waves) {
-        this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y));
+        let id = this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y));
+
+        this.currentMsgId = id;
+
+        this.nextResendIn = Math.floor(Math.random() * 100);
+    }
+
+    resendPrevMsg() {
+
+        if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
+
+            this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y, this.currentMsgId))
+
+            this.nextResendIn = Math.floor(Math.random() * 1000);
+            this.currentResendCount += 1;
+
+        }
+
     }
 
 }
