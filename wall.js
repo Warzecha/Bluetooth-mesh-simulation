@@ -23,6 +23,6 @@ class Wall {
                 stroke(255);
         }
         strokeWeight(6);
-        line(this.p1.x, this.p1.y, this.p2.x, this.p2.y);
+        line(this.p1.x * PIXELS_PER_METER, this.p1.y * PIXELS_PER_METER, this.p2.x * PIXELS_PER_METER, this.p2.y * PIXELS_PER_METER);
     }
 }

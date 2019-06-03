@@ -1,6 +1,10 @@
 class Node {
 
+
     constructor(x, y, bluetoothClass, mobile) {
+
+        this.id = Node.count++;
+
         this.pos = createVector(x, y);
         this.bluetoothClass = bluetoothClass;
         this.mobile = mobile;
@@ -21,20 +25,30 @@ class Node {
         this.maxResendCount = 2;
         this.currentResendCount = 0;
         this.currentMsgId = -1;
+        this.currentMsgTarget = -1;
 
         this.nextResendIn = 0;
+
+        this.consumedMessages = new Set();
+
+        this.showSender = 0;
 
     }
 
     show() {
         strokeWeight(1);
-        fill(255);
+
+        if(Node.receivers.has(this.id)) {
+            fill(255, 100, 100);
+        } else {
+            fill(255);
+        }
         stroke(255, 255, 255);
-        ellipse(this.pos.x, this.pos.y, 30);
+        ellipse(this.pos.x * PIXELS_PER_METER, this.pos.y * PIXELS_PER_METER, 30);
         textSize(22);
         fill(0, 0, 0);
         textAlign(CENTER, CENTER);
-        text(this.bluetoothClass.toString(), this.pos.x, this.pos.y);
+        text(this.bluetoothClass.toString(), this.pos.x * PIXELS_PER_METER, this.pos.y * PIXELS_PER_METER);
 
     }
 
@@ -44,7 +58,7 @@ class Node {
         let angleDelta = random(-maxAngleChange, maxAngleChange);
 
         this.direction.rotate(angleDelta);
-        const speedDelta = random(-0.1, 1);
+        const speedDelta = random(-0.01, 0.1);
 
         let newSpeed = constrain(this.direction.mag() + speedDelta, 0, this.maxSpeed);
         this.direction.setMag(newSpeed);
@@ -58,7 +72,7 @@ class Node {
 
             let distance = nominator / denominator;
 
-            if (distance < 15) {
+            if (distance < 1) {
                 moveNow = false;
 
             }
@@ -69,8 +83,8 @@ class Node {
             this.pos.y += this.direction.y;
         }
 
-        this.pos.x = constrain(this.pos.x, 0, windowWidth);
-        this.pos.y = constrain(this.pos.y, 0, windowHeight);
+        this.pos.x = constrain(this.pos.x, 0, WIDTH);
+        this.pos.y = constrain(this.pos.y, 0, HEIGHT);
 
     }
 
@@ -85,25 +99,46 @@ class Node {
         return this.pos;
     }
 
-    relay(waves) {
+    processWaves(waves) {
+
+        waves.forEach(wave => {
 
 
-        if (this.isRelay && this.freeze == 0) {
+            if (Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 0.1) {
 
-            waves.forEach(wave => {
+                if (wave.targetId == this.id) {
 
-                // console.log("relay: ", Math.abs(this.pos.dist(wave.center)))
-                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 2) {
-
-                    if (!this.queue.contains(wave.id)) {
-                        this.sendWave(waves, wave);
+                    if(!this.consumedMessages.has(wave.id)) {
+                        // console.log("wave: ", wave.id)
+                        // console.log("wave target: ", wave.targetId)
+                        // console.log("node: ", this.id)
+                        console.log("RECEIVED!")
+                        this.consumedMessages.add(wave.id)
+                        Node.receivers.delete(wave.targetId)
                     }
 
+                    return;
                 }
 
-            });
 
-        }
+
+
+                if (this.isRelay && this.freeze == 0) {
+
+
+                    if (wave.ttl > 0) {
+
+                        if (!this.queue.contains(wave.id)) {
+                            this.sendWave(waves, wave);
+                        }
+
+                    }
+                }
+            }
+
+        });
+
+
     }
 
     sendWave(waves, toSend) {
@@ -111,15 +146,19 @@ class Node {
 
         this.queue.push(toSend.id)
 
-        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1))
+        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId))
 
         return toSend.id;
     }
 
     sendNewWave(waves) {
-        let id = this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y));
+        this.currentMsgTarget =  Math.floor(Math.random()*Node.count);
+        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, 4, this.currentMsgTarget));
 
         this.currentMsgId = id;
+        Node.receivers.add(this.currentMsgTarget);
+
+
 
         this.nextResendIn = Math.floor(Math.random() * 100);
     }
@@ -128,7 +167,7 @@ class Node {
 
         if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
 
-            this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y, this.currentMsgId))
+            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, 4, this.currentMsgTarget))
 
             this.nextResendIn = Math.floor(Math.random() * 1000);
             this.currentResendCount += 1;
@@ -138,3 +177,7 @@ class Node {
     }
 
 }
+
+Node.count = 0;
+
+Node.receivers = new Set();

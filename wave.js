@@ -1,10 +1,10 @@
 class Wave {
 
-    constructor(x, y, id, ttl) {
+    constructor(x, y, id, ttl, targetId) {
         this.center = createVector(x, y);
         this.i = 0;
         this.moveF = true;
-        this.maxRadius = 300;
+        this.maxRadius = 24;
         this.toDelete = false;
         this.intersection = false;
 
@@ -12,19 +12,17 @@ class Wave {
 
         this.ttl = ttl;
 
-        this.distance = 100;
-    }
-
-    getRelayedCopy() {
-        return new Wave(this.pos.x, this.pos.y, this.id, this.ttl-1)
-    }
-
-    static createWave(x, y, id) {
-
         if (typeof id === 'undefined') {
             id = Math.floor(Math.random() * 1000000);
         }
-        return new Wave(x, y, id, 4)
+
+        if (typeof targetId === 'undefined') {
+            targetId = Math.floor(Math.random()*Node.count);
+        }
+
+        this.targetId = targetId;
+
+        this.distance = 24;
     }
 
     show(walls) {
@@ -51,17 +49,17 @@ class Wave {
         } else stroke(255);
 
 
-        ellipse(this.center.x, this.center.y, this.i, this.i);
+        ellipse(this.center.x * PIXELS_PER_METER, this.center.y * PIXELS_PER_METER, this.i * PIXELS_PER_METER, this.i * PIXELS_PER_METER);
 
         if (this.moveF) {
-            this.i += 1;
+            this.i += 0.1;
             if (this.i >= this.maxRadius) {
                 this.i = 0;
                 this.moveF = false;
             }
         }
 
-        if (!this.moveF && !this.moveS && !this.moveT) {
+        if (!this.moveF) {
             this.toDelete = true;
         }
     }

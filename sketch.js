@@ -1,5 +1,4 @@
 let nodes = [];
-let connections = [];
 let walls = [];
 let waves = [];
 
@@ -8,20 +7,21 @@ function setup() {
 
     // append(walls, new Wall(createVector(100, 100), createVector(600, 100), 1))
     // append(walls, new Wall(createVector(100, 200), createVector(600, 200), 2))
-    append(walls, new Wall(createVector(0, 50), createVector(windowWidth / 2 - 40, 50), 3));
-    append(walls, new Wall(createVector(windowWidth / 2 + 40, 50), createVector(windowWidth, 50), 3));
-    append(walls, new Wall(createVector(windowWidth, 50), createVector(windowWidth, windowHeight), 3));
-    append(walls, new Wall(createVector(windowWidth, windowHeight), createVector(0, windowHeight), 3));
-    append(walls, new Wall(createVector(0, windowHeight), createVector(0, 50), 3));
+    append(walls, new Wall(createVector(1, 1), createVector(1, HEIGHT-1), 3));
 
 
         //  USED FOR TESTING
-        append(nodes, new Node(300, 300, 1, false));
-        append(nodes, new Node(300, 400, 1, false));
+        append(nodes, new Node(14, 5, 1, false));
+        append(nodes, new Node(14, 10, 1, false));
+        append(nodes, new Node(14, 15, 1, false));
+        append(nodes, new Node(14, 20, 1, false));
+        append(nodes, new Node(14, 25, 1, false));
+        append(nodes, new Node(14, 30, 1, false));
+
 
     // for (let i = 0; i < STATIC_NODE_COUNT; i++) {
-    //     const x = random(0, windowWidth);
-    //     const y = random(0, windowHeight);
+    //     const x = random(2, WIDTH-1);
+    //     const y = random(2, HEIGHT-1);
 
     
     //     append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), false));
@@ -31,17 +31,10 @@ function setup() {
 
 
     // for (let i = 0; i < MOBILE_NODE_COUNT; i++) {
-    //     const x = random(0, windowWidth);
-    //     const y = random(0, windowHeight);
+    //     const x = random(2, WIDTH-1);
+    //     const y = random(2, HEIGHT-1);
 
     //     append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), true));
-    // }
-
-
-    // for (let i = 0; i < nodes.length; i++) {
-    //     for (let j = i + 1; j < nodes.length; j++) {
-    //         append(connections, new Connection(nodes[i], nodes[j]));
-    //     }
     // }
 
 }
@@ -60,19 +53,12 @@ function draw() {
         node.moveRandomly(walls);
         node.show();
         node.update();
-        node.relay(waves);
+        node.processWaves(waves);
         node.resendPrevMsg();
     });
 
     walls.forEach(wall => {
         wall.show();
-    });
-
-    connections.forEach(connection => {
-        walls.forEach(w => {
-            connection.updateIntersection(w);
-        });
-        connection.show();
     });
 
 
@@ -85,4 +71,5 @@ function mouseClicked() {
     let randomNode = nodes[randomIndex];
     randomNode.sendNewWave(waves);
 
+    console.log(Node.receivers)
   }
