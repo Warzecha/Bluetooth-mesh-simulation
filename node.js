@@ -44,11 +44,11 @@ class Node {
             fill(255);
         }
         stroke(255, 255, 255);
-        ellipse(this.pos.x, this.pos.y, 30);
+        ellipse(this.pos.x * PIXELS_PER_METER, this.pos.y * PIXELS_PER_METER, 30);
         textSize(22);
         fill(0, 0, 0);
         textAlign(CENTER, CENTER);
-        text(this.bluetoothClass.toString(), this.pos.x, this.pos.y);
+        text(this.bluetoothClass.toString(), this.pos.x * PIXELS_PER_METER, this.pos.y * PIXELS_PER_METER);
 
     }
 
@@ -58,7 +58,7 @@ class Node {
         let angleDelta = random(-maxAngleChange, maxAngleChange);
 
         this.direction.rotate(angleDelta);
-        const speedDelta = random(-0.1, 1);
+        const speedDelta = random(-0.01, 0.1);
 
         let newSpeed = constrain(this.direction.mag() + speedDelta, 0, this.maxSpeed);
         this.direction.setMag(newSpeed);
@@ -72,7 +72,7 @@ class Node {
 
             let distance = nominator / denominator;
 
-            if (distance < 15) {
+            if (distance < 1) {
                 moveNow = false;
 
             }
@@ -83,8 +83,8 @@ class Node {
             this.pos.y += this.direction.y;
         }
 
-        this.pos.x = constrain(this.pos.x, 0, windowWidth);
-        this.pos.y = constrain(this.pos.y, 0, windowHeight);
+        this.pos.x = constrain(this.pos.x, 0, WIDTH);
+        this.pos.y = constrain(this.pos.y, 0, HEIGHT);
 
     }
 
@@ -104,7 +104,7 @@ class Node {
         waves.forEach(wave => {
 
 
-            if (Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 10) {
+            if (Math.abs(this.pos.dist(wave.center) - 0.5 * wave.i) <= 0.1) {
 
                 if (wave.targetId == this.id) {
 

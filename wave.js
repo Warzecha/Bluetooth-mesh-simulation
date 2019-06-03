@@ -4,7 +4,7 @@ class Wave {
         this.center = createVector(x, y);
         this.i = 0;
         this.moveF = true;
-        this.maxRadius = 300;
+        this.maxRadius = 24;
         this.toDelete = false;
         this.intersection = false;
 
@@ -22,7 +22,7 @@ class Wave {
 
         this.targetId = targetId;
 
-        this.distance = 100;
+        this.distance = 24;
     }
 
     show(walls) {
@@ -49,10 +49,10 @@ class Wave {
         } else stroke(255);
 
 
-        ellipse(this.center.x, this.center.y, this.i, this.i);
+        ellipse(this.center.x * PIXELS_PER_METER, this.center.y * PIXELS_PER_METER, this.i * PIXELS_PER_METER, this.i * PIXELS_PER_METER);
 
         if (this.moveF) {
-            this.i += 5;
+            this.i += 0.1;
             if (this.i >= this.maxRadius) {
                 this.i = 0;
                 this.moveF = false;
