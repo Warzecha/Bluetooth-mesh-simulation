@@ -63,4 +63,8 @@ class Wave {
             this.toDelete = true;
         }
     }
+
+    intersects(pos) {
+        return Math.abs(pos.dist(this.center) - 0.5 * this.i) <= 0.1
+    }
 }
