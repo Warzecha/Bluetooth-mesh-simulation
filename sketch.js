@@ -16,8 +16,13 @@ function setup() {
 
 
         //  USED FOR TESTING
+        // append(nodes, new Node(300, 200, 1, false));
         // append(nodes, new Node(300, 300, 1, false));
         // append(nodes, new Node(300, 400, 1, false));
+        // append(nodes, new Node(300, 500, 1, false));
+        // append(nodes, new Node(300, 600, 1, false));
+        // append(nodes, new Node(300, 700, 1, false));
+        // append(nodes, new Node(300, 800, 1, false));
 
     for (let i = 0; i < STATIC_NODE_COUNT; i++) {
         const x = random(0, windowWidth);

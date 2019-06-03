@@ -114,6 +114,7 @@ class Node {
                         // console.log("node: ", this.id)
                         console.log("RECEIVED!")
                         this.consumedMessages.add(wave.id)
+                        Node.receivers.delete(wave.targetId)
                     }
 
                     return;
@@ -155,6 +156,8 @@ class Node {
         let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, 4, this.currentMsgTarget));
 
         this.currentMsgId = id;
+        Node.receivers.add(this.currentMsgTarget);
+
 
 
         this.nextResendIn = Math.floor(Math.random() * 100);

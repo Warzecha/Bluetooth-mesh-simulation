@@ -20,24 +20,10 @@ class Wave {
             targetId = Math.floor(Math.random()*Node.count);
         }
 
-        Node.receivers.add(targetId);
-
         this.targetId = targetId;
 
         this.distance = 100;
     }
-
-    // getRelayedCopy() {
-    //     return new Wave(this.pos.x, this.pos.y, this.id, this.ttl-1, this.targetId)
-    // }
-
-    // static createWave(x, y, id) {
-
-    //     if (typeof id === 'undefined') {
-    //         id = Math.floor(Math.random() * 1000000);
-    //     }
-    //     return new Wave(x, y, id, 40)
-    // }
 
     show(walls) {
 
@@ -66,7 +52,7 @@ class Wave {
         ellipse(this.center.x, this.center.y, this.i, this.i);
 
         if (this.moveF) {
-            this.i += 1;
+            this.i += 5;
             if (this.i >= this.maxRadius) {
                 this.i = 0;
                 this.moveF = false;
