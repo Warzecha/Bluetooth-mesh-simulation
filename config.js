@@ -8,4 +8,4 @@ const PIXELS_PER_METER = 20;
 const WIDTH = 40;
 const HEIGHT = 40;
 
-const WAVE_ANGULAR_RES = 6;
+const WAVE_ANGULAR_RES = 20;
