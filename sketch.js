@@ -38,11 +38,11 @@ function setup() {
     // }
 
 
-    for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-            append(connections, new Connection(nodes[i], nodes[j]));
-        }
-    }
+    // for (let i = 0; i < nodes.length; i++) {
+    //     for (let j = i + 1; j < nodes.length; j++) {
+    //         append(connections, new Connection(nodes[i], nodes[j]));
+    //     }
+    // }
 
 }
 

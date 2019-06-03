@@ -20,7 +20,9 @@ class Wave {
     }
 
     static createWave(x, y) {
-        return new Wave(x, y, Math.random(1000), this.ttl-1)
+
+        const id = Math.floor(Math.random() * 1000000);
+        return new Wave(x, y, id, 4)
     }
 
     show(walls) {

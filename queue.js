@@ -16,19 +16,8 @@ class Queue {
         append(this.arr, id);
     }
 
-    isPresent(targetId) {
-
-        console.log(this.arr.length)
-
-        this.arr.forEac
-        this.arr.forEach(id => {
-     
-            if(id === targetId) {
-                return true;
-            }
-        });
-
-        return false;
+    contains(targetId) {
+        return this.arr.includes(targetId);
     }
 
 }

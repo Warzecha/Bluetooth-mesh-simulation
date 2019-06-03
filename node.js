@@ -84,14 +84,13 @@ class Node {
         if (this.isRelay && this.freeze == 0) {
             
             waves.forEach(wave => {
-
-                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - wave.i) < 1) {
+                
+                // console.log("relay: ", Math.abs(this.pos.dist(wave.center)))
+                if (wave.ttl > 0 && Math.abs(this.pos.dist(wave.center) - wave.i)  <= 4) {
                     
-                    console.log("relay: ", Math.abs(this.pos.dist(wave.center)))
 
-                    if (!this.queue.isPresent(wave.id)) {
-                        this.relayWave(waves, wave);
-                        this.queue.push(wave.id)
+                    if (!this.queue.contains(wave.id)) {
+                        this.sendWave(waves, wave);
                     }
 
                 }
@@ -101,22 +100,16 @@ class Node {
         }
     }
 
-    relayWave(waves, toRelay) {
+    sendWave(waves, toSend) {
         this.freeze = 30;
-        append(waves, new Wave(this.pos.x, this.pos.y, toRelay.id, toRelay.ttl - 1))
-    }
 
-    sendWave(waves, id, ttl) {
-        this.freeze = 30;
-        append(waves, new Wave(this.pos.x, this.pos.y, id, ttl))
+        this.queue.push(toSend.id)
 
+        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1))
     }
 
     sendNewWave(waves) {
-        this.sendWave(waves, Math.random(1000000), 3);
+        this.sendWave(waves, Wave.createWave(this.pos.x, this.pos.y));
     }
-
-
-
 
 }
