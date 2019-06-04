@@ -8,7 +8,7 @@ class Node {
         this.bluetoothClass = bluetoothClass;
         this.mobile = mobile;
 
-        this.isRelay = true;
+        this.isRelay = Math.random() <= RELAY_RATIO;
         this.queue = new Queue(10);
 
         if (mobile) {
@@ -108,10 +108,12 @@ class Node {
                 if (wave.targetId == this.id) {
 
                     if(!this.consumedMessages.has(wave.id)) {
-
                         console.log("RECEIVED!")
                         this.consumedMessages.add(wave.id)
                         Node.receivers.delete(wave.targetId)
+                        Node.receivedCount++;
+
+
                     }
 
                     return;
@@ -140,16 +142,17 @@ class Node {
 
         this.queue.push(toSend.id)
 
-        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId))
+        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId, this.bluetoothClass))
 
         return toSend.id;
     }
 
     sendNewWave(waves) {
         this.currentMsgTarget =  Math.floor(Math.random()*Node.count);
-        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, 4, this.currentMsgTarget));
+        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, 4, this.currentMsgTarget, this.bluetoothClass));
 
         this.currentMsgId = id;
+        Node.sentCount++;
         Node.receivers.add(this.currentMsgTarget);
 
 
@@ -161,7 +164,7 @@ class Node {
 
         if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
 
-            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, 4, this.currentMsgTarget))
+            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, 4, this.currentMsgTarget, this.bluetoothClass))
 
             this.nextResendIn = Math.floor(Math.random() * 1000);
             this.currentResendCount += 1;
@@ -175,3 +178,6 @@ class Node {
 Node.count = 0;
 
 Node.receivers = new Set();
+
+Node.sentCount = 0;
+Node.receivedCount = 0;

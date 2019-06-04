@@ -2,6 +2,8 @@ let nodes = [];
 let walls = [];
 let waves = [];
 
+
+
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
@@ -118,6 +120,13 @@ function draw() {
     walls.forEach(wall => {
         wall.show();
     });
+
+
+    fill(255)
+    noStroke()
+    textSize(32);
+    textAlign(LEFT);
+    text('Received ratio: ' + Node.receivedCount / Node.sentCount, 50, windowHeight-50);
 
 
 }

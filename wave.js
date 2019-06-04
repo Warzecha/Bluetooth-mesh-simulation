@@ -1,6 +1,6 @@
 class Wave {
 
-    constructor(x, y, id, ttl, targetId) {
+    constructor(x, y, id, ttl, targetId, blClass) {
         this.center = createVector(x, y);
 
         this.points = [];
@@ -11,7 +11,7 @@ class Wave {
         }
 
         this.moveF = true;
-        this.maxRadius = 24;
+
         this.toDelete = false;
 
         this.id = id;
@@ -25,8 +25,26 @@ class Wave {
             targetId = Math.floor(Math.random() * Node.count);
         }
 
+        if (typeof blClass === 'undefined') {
+            blClass = 3;
+        }
+
+        switch (blClass) {
+            case 3:
+                this.maxRadius = 10;
+                break;
+            case 2:
+                this.maxRadius = 16;
+                break;
+            case 1:
+                this.maxRadius = 24;
+                break;
+            default:
+                this.maxRadius = 12;
+        }
+
         this.targetId = targetId;
-        this.distance = 24;
+
     }
 
     update(walls) {
@@ -63,15 +81,11 @@ class Wave {
                 if (!interferes && this.center.dist(point) < this.maxRadius) {
                     point.add(propagationDirection)
                     propagates = true;
-                } else if (interferes && this.center.dist(point) < (this.maxRadius/3)) {
+                } else if (interferes && this.center.dist(point) < (this.maxRadius / 3)) {
                     point.add(propagationDirection)
                     propagates = true;
                 }
             }
-
-            
-
-
 
         }
 
@@ -82,17 +96,27 @@ class Wave {
 
     show() {
 
-        if (this.intersection) {
-            stroke(238, 244, 66);
-        } else stroke(255);
+
+        colorMode(HSB, 255);
+
+
 
         beginShape();
         this.points.forEach(point => {
+
+            let hue = Math.max(120 - this.center.dist(point) * 10, 0);
+
+            let c = color(hue, 126, 255);
+
+            stroke(c);
+
             vertex(point.x * PIXELS_PER_METER, point.y * PIXELS_PER_METER);
 
         });
 
         endShape(CLOSE);
+
+        colorMode(RGB, 255);
     }
 
     intersects(pos) {

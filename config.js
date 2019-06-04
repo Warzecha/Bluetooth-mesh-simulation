@@ -9,3 +9,5 @@ const WIDTH = 80;
 const HEIGHT = 40;
 
 const WAVE_ANGULAR_RES = 20;
+
+const RELAY_RATIO = 0.1;
