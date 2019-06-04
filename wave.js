@@ -1,6 +1,6 @@
 class Wave {
 
-    constructor(x, y, id, ttl, targetId) {
+    constructor(x, y, id, ttl, targetId, blClass) {
         this.center = createVector(x, y);
 
         this.points = [];
@@ -11,7 +11,7 @@ class Wave {
         }
 
         this.moveF = true;
-        this.maxRadius = 24;
+
         this.toDelete = false;
 
         this.id = id;
@@ -25,51 +25,98 @@ class Wave {
             targetId = Math.floor(Math.random() * Node.count);
         }
 
+        if (typeof blClass === 'undefined') {
+            blClass = 3;
+        }
+
+        switch (blClass) {
+            case 3:
+                this.maxRadius = 10;
+                break;
+            case 2:
+                this.maxRadius = 16;
+                break;
+            case 1:
+                this.maxRadius = 24;
+                break;
+            default:
+                this.maxRadius = 12;
+        }
+
         this.targetId = targetId;
-        this.distance = 24;
+
     }
 
-    show(walls) {
+    update(walls) {
 
         let propagates = false;
         noFill();
         strokeWeight(1.5);
-        walls.forEach(wall => {
+        for (let i = 0; i < this.points.length; i++) {
 
-            for (let i = 0; i < this.points.length; i++) {
-                let point = this.points[i];
-                let intersects = this.intersectsWall(this.center, point, wall);
-                let max = this.maxRadius;
-                if (intersects) {
-                    max /= 12;
+            let intersects = false;
+            let interferes = false;
+            let point = this.points[i];
+
+            for (let j = 0; j < walls.length; j++) {
+
+                let wall = walls[j];
+
+                if (this.intersectsWall(this.center, point, wall)) {
+                    if (wall.wallClass == 3) {
+                        intersects = true;
+                    } else {
+                        interferes = true;
+
+                    }
                 }
 
-                let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, 0.1);
+            };
 
 
-                if (this.center.dist(point) < max) {
+            let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, 0.05);
+
+            if (!intersects) {
+
+                if (!interferes && this.center.dist(point) < this.maxRadius) {
+                    point.add(propagationDirection)
+                    propagates = true;
+                } else if (interferes && this.center.dist(point) < (this.maxRadius / 3)) {
                     point.add(propagationDirection)
                     propagates = true;
                 }
             }
 
-        });
+        }
 
-        if (this.intersection) {
-            stroke(238, 244, 66);
-        } else stroke(255);
+        if (!propagates) {
+            this.toDelete = true;
+        }
+    }
+
+    show() {
+
+
+        colorMode(HSB, 255);
+
+
 
         beginShape();
         this.points.forEach(point => {
+
+            let hue = Math.max(120 - this.center.dist(point) * 10, 0);
+
+            let c = color(hue, 126, 255);
+
+            stroke(c);
+
             vertex(point.x * PIXELS_PER_METER, point.y * PIXELS_PER_METER);
 
         });
 
         endShape(CLOSE);
 
-        if (!propagates) {
-            this.toDelete = true;
-        }
+        colorMode(RGB, 255);
     }
 
     intersects(pos) {

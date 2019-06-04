@@ -76,7 +76,7 @@ Charakterystyka odległościowa:
 | 25+ | XX|
 
 
-####Określenie charakterystyki spadku mocy w zależności od odległości
+#### Określenie charakterystyki spadku mocy w zależności od odległości
 
 Spadek mocy z odległością:
 
@@ -113,6 +113,3 @@ Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału.
 - Rozwiązaniem, które powinno spełniać oczekiwania są węzły umieszczone na korytarzach i to przez nie będzie prowadzona komunikacja w całym budynku. Sygnał w linii prostej w korytarzu może rozchodzić się na 25 m więc węzły w korytarzu mogą być rzadsze, jednak przy dużej ilości zakrętów czy zakłóceń (szafy elektryczne itp) powinny być gęściej. 
 
 - Na klatce schodowej sygnał rozchodzi się poprawnie.
-
-- Dane zostaną przekazane zespołowi od symulacji do implementacji w programie.
-
