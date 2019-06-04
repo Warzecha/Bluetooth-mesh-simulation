@@ -44,6 +44,7 @@ class Wave {
         }
 
         this.targetId = targetId;
+        this.id = id;
 
     }
 
@@ -81,7 +82,7 @@ class Wave {
                 if (!interferes && this.center.dist(point) < this.maxRadius) {
                     point.add(propagationDirection)
                     propagates = true;
-                } else if (interferes && this.center.dist(point) < (this.maxRadius / 3)) {
+                } else if (interferes && this.center.dist(point) < (this.maxRadius / 2)) {
                     point.add(propagationDirection)
                     propagates = true;
                 }

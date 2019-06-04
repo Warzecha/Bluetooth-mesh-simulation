@@ -37,7 +37,7 @@ class Node {
     show() {
         strokeWeight(1);
 
-        if(Node.receivers.has(this.id)) {
+        if (Node.receivers.has(this.id)) {
             fill(255, 100, 100);
         } else {
             fill(255);
@@ -51,7 +51,7 @@ class Node {
         if (this.isRelay) {
             fill(0, 0, 0);
             textSize(12);
-            text("R", this.pos.x*PIXELS_PER_METER + 9, this.pos.y *PIXELS_PER_METER +4)
+            text("R", this.pos.x * PIXELS_PER_METER + 9, this.pos.y * PIXELS_PER_METER + 4)
         }
 
 
@@ -113,7 +113,7 @@ class Node {
 
                 if (wave.targetId == this.id) {
 
-                    if(!this.consumedMessages.has(wave.id)) {
+                    if (!this.consumedMessages.has(wave.id)) {
                         console.log("RECEIVED!")
                         this.consumedMessages.add(wave.id)
                         Node.receivers.delete(wave.targetId)
@@ -125,16 +125,20 @@ class Node {
                     return;
                 }
 
-                if (this.isRelay && this.freeze == 0) {
+                
+                if (this.isRelay) {
+                    if (this.freeze == 0) {
+                        
+                        if (wave.ttl > 0) {
 
+                            if (!this.queue.contains(wave.id)) {
+                                this.sendWave(waves, wave);
+                            }
 
-                    if (wave.ttl > 0) {
-
-                        if (!this.queue.contains(wave.id)) {
-                            this.sendWave(waves, wave);
                         }
-
                     }
+
+
                 }
             }
 
@@ -146,16 +150,17 @@ class Node {
     sendWave(waves, toSend) {
         this.freeze = 3;
 
-        this.queue.push(toSend.id)
+        let newWave = new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId, this.bluetoothClass);
 
-        append(waves, new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId, this.bluetoothClass))
+        append(waves, newWave)
+        this.queue.push(newWave.id)
 
         return toSend.id;
     }
 
     sendNewWave(waves) {
-        this.currentMsgTarget =  Math.floor(Math.random()*Node.count);
-        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, 4, this.currentMsgTarget, this.bluetoothClass));
+        this.currentMsgTarget = Math.floor(Math.random() * Node.count);
+        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, TTL, this.currentMsgTarget, this.bluetoothClass));
 
         this.currentMsgId = id;
         Node.sentCount++;
@@ -170,7 +175,7 @@ class Node {
 
         if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
 
-            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, 4, this.currentMsgTarget, this.bluetoothClass))
+            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, TTL, this.currentMsgTarget, this.bluetoothClass))
 
             this.nextResendIn = Math.floor(Math.random() * 1000);
             this.currentResendCount += 1;
