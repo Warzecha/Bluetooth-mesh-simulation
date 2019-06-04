@@ -3,10 +3,8 @@ let walls = [];
 let waves = [];
 
 
-
 function setup() {
     createCanvas(windowWidth, windowHeight);
-
 
     //OUTER WALLS
     append(walls, new Wall(createVector(1, 1), createVector(70, 4), 3));
@@ -39,7 +37,6 @@ function setup() {
     append(walls, new Wall(createVector(10, 9), createVector(10, 1.6), 2));
 
 
-
     //INNER WALLS UP
     append(walls, new Wall(createVector(21, 14), createVector(21, 2.1), 2));
     append(walls, new Wall(createVector(21, 14), createVector(25, 14), 2));
@@ -66,10 +63,6 @@ function setup() {
     append(walls, new Wall(createVector(10, 29), createVector(10, 33), 2));
 
 
-
-
-
-
     //  USED FOR TESTING
     // append(nodes, new Node(15, 15, 1, false));
     // append(nodes, new Node(14, 10, 1, false));
@@ -77,7 +70,6 @@ function setup() {
     // append(nodes, new Node(14, 20, 1, false));
     // append(nodes, new Node(14, 25, 1, false));
     // append(nodes, new Node(14, 30, 1, false));
-
 
 
     for (let i = 0; i < STATIC_NODE_COUNT; i++) {
@@ -103,10 +95,15 @@ function draw() {
 
     waves.forEach(wave => {
         wave.update(walls);
-        wave.show()
+        wave.show();
         if (wave.toDelete) {
             waves.splice(0, 1);
         }
+        waves.forEach(otherWave => {
+            if (wave !== otherWave) {
+                wave.checkCrossing(otherWave);
+            }
+        })
     });
 
     nodes.forEach(node => {
@@ -122,11 +119,11 @@ function draw() {
     });
 
 
-    fill(255)
-    noStroke()
+    fill(255);
+    noStroke();
     textSize(32);
     textAlign(LEFT);
-    text('Received ratio: ' + Node.receivedCount / Node.sentCount, 50, windowHeight-50);
+    text('Received ratio: ' + Math.round(Node.receivedCount * 100 / Node.sentCount) + '%', 50, windowHeight - 50);
 
 
 }
