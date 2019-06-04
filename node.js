@@ -48,6 +48,12 @@ class Node {
         fill(0, 0, 0);
         textAlign(CENTER, CENTER);
         text(this.bluetoothClass.toString(), this.pos.x * PIXELS_PER_METER, this.pos.y * PIXELS_PER_METER);
+        if (this.isRelay) {
+            fill(0, 0, 0);
+            textSize(12);
+            text("R", this.pos.x*PIXELS_PER_METER + 9, this.pos.y *PIXELS_PER_METER +4)
+        }
+
 
     }
 
