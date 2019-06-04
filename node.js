@@ -125,10 +125,10 @@ class Node {
                     return;
                 }
 
-                
+
                 if (this.isRelay) {
                     if (this.freeze == 0) {
-                        
+
                         if (wave.ttl > 0) {
 
                             if (!this.queue.contains(wave.id)) {
@@ -165,7 +165,6 @@ class Node {
         this.currentMsgId = id;
         Node.sentCount++;
         Node.receivers.add(this.currentMsgTarget);
-
 
 
         this.nextResendIn = Math.floor(Math.random() * 100);

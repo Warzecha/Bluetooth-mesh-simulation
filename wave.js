@@ -45,7 +45,17 @@ class Wave {
 
         this.targetId = targetId;
         this.id = id;
+        this.crossesOtherWall = false;
+        this.speed = 0.05;
 
+    }
+
+    checkCrossing(wave) {
+        if (this.intersectsOtherWave(wave) && this.crossesOtherWall === false) {
+            this.maxRadius *= 0.91;
+            this.speed *= 0.9;
+            this.crossesOtherWall = true;
+        }
     }
 
     update(walls) {
@@ -72,18 +82,17 @@ class Wave {
                     }
                 }
 
-            };
+            }
 
-
-            let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, 0.05);
+            let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, this.speed);
 
             if (!intersects) {
 
                 if (!interferes && this.center.dist(point) < this.maxRadius) {
-                    point.add(propagationDirection)
+                    point.add(propagationDirection);
                     propagates = true;
                 } else if (interferes && this.center.dist(point) < (this.maxRadius / 2)) {
-                    point.add(propagationDirection)
+                    point.add(propagationDirection);
                     propagates = true;
                 }
             }
@@ -99,8 +108,6 @@ class Wave {
 
 
         colorMode(HSB, 255);
-
-
 
         beginShape();
         this.points.forEach(point => {
@@ -127,7 +134,8 @@ class Wave {
 
         for (let i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
 
-            let xi = this.points[i].x, yi = this.points[i].y; let xj = this.points[j].x, yj = this.points[j].y;
+            let xi = this.points[i].x, yi = this.points[i].y;
+            let xj = this.points[j].x, yj = this.points[j].y;
 
             if (yj == yi && yj == y && x > Math.min(xj, xi) && x < Math.max(xj, xi)) { // Check if point is on an horizontal polygon boundary
                 return true;
@@ -157,6 +165,10 @@ class Wave {
             return false;
 
         }
+    }
+
+    intersectsOtherWave(otherWave) {
+        return this.intersects(otherWave.center);
     }
 
     intersectsWall(center, end, wall) {
