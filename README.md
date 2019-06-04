@@ -76,7 +76,7 @@ Charakterystyka odległościowa:
 | 25+ | XX|
 
 
-####Określenie charakterystyki spadku mocy w zależności od odległości
+#### Określenie charakterystyki spadku mocy w zależności od odległości
 
 Spadek mocy z odległością:
 
