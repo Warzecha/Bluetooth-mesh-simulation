@@ -10,10 +10,7 @@ class Wave {
 
         }
 
-        this.moveF = true;
-
         this.toDelete = false;
-
         this.id = id;
         this.ttl = ttl;
 
@@ -43,18 +40,22 @@ class Wave {
                 this.maxRadius = 12;
         }
 
+
+        this.unmodifiedRadius = this.maxRadius;
         this.targetId = targetId;
         this.id = id;
-        this.crossesOtherWall = false;
         this.speed = 0.05;
+        this.unmodifiedSpped = this.speed;
+        this.crossedWallsIds = [];
+        this.secondId = Math.floor(Math.random() * 1000000);
 
     }
 
     checkCrossing(wave) {
-        if (this.intersectsOtherWave(wave) && this.crossesOtherWall === false) {
-            this.maxRadius *= 0.91;
-            this.speed *= 0.9;
-            this.crossesOtherWall = true;
+        if (this.intersectsOtherWave(wave) && !this.crossedWallsIds.includes(wave.secondId)) {
+            this.maxRadius = (this.unmodifiedRadius - this.crossedWallsIds.length * 0.2);
+            this.speed = (this.unmodifiedSpped - this.crossedWallsIds.length * 0.002);
+            append(this.crossedWallsIds, wave.secondId);
         }
     }
 
@@ -74,7 +75,7 @@ class Wave {
                 let wall = walls[j];
 
                 if (this.intersectsWall(this.center, point, wall)) {
-                    if (wall.wallClass == 3) {
+                    if (wall.wallClass === 3) {
                         intersects = true;
                     } else {
                         interferes = true;
@@ -137,38 +138,35 @@ class Wave {
             let xi = this.points[i].x, yi = this.points[i].y;
             let xj = this.points[j].x, yj = this.points[j].y;
 
-            if (yj == yi && yj == y && x > Math.min(xj, xi) && x < Math.max(xj, xi)) { // Check if point is on an horizontal polygon boundary
+            if (yj === yi && yj === y && x > Math.min(xj, xi) && x < Math.max(xj, xi)) { // Check if point is on an horizontal polygon boundary
                 return true;
             }
 
-            if (y > Math.min(yj, yi) && y <= Math.max(yj, yi) && x <= Math.max(xj, xi) && yj != yi) {
+            if (y > Math.min(yj, yi) && y <= Math.max(yj, yi) && x <= Math.max(xj, xi) && yj !== yi) {
 
                 ss = (y - yj) * (xi - xj) / (yi - yj) + xj;
 
-                if (ss == x) {
+                if (ss === x) {
                     return true;
                 }
 
-                if (xj == xi || x <= ss) {
+                if (xj === xi || x <= ss) {
 
                     intersections++;
                 }
             }
         }
 
-        if (intersections % 2 != 0) {
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
+        return intersections % 2 !== 0;
     }
 
     intersectsOtherWave(otherWave) {
-        return this.intersects(otherWave.center);
+        for (let point of otherWave.points) {
+            if (this.intersects(point)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     intersectsWall(center, end, wall) {

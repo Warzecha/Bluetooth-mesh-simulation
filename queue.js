@@ -3,17 +3,15 @@ class Queue {
     constructor(maxLenght) {
         this.maxLenght = maxLenght;
 
-        this.arr = new Array()
-
+        this.arr = []
     }
 
     push(id) {
 
-        
         if (this.arr.length >= this.maxLenght) {
             this.arr.shift();
         }
-        
+
         append(this.arr, id);
     }
 
