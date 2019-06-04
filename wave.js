@@ -29,31 +29,58 @@ class Wave {
         this.distance = 24;
     }
 
-    show(walls) {
+    update(walls) {
 
         let propagates = false;
         noFill();
         strokeWeight(1.5);
-        walls.forEach(wall => {
+        for (let i = 0; i < this.points.length; i++) {
 
-            for (let i = 0; i < this.points.length; i++) {
-                let point = this.points[i];
-                let intersects = this.intersectsWall(this.center, point, wall);
-                let max = this.maxRadius;
-                if (intersects) {
-                    max /= 12;
+            let intersects = false;
+            let interferes = false;
+            let point = this.points[i];
+
+            for (let j = 0; j < walls.length; j++) {
+
+                let wall = walls[j];
+
+                if (this.intersectsWall(this.center, point, wall)) {
+                    if (wall.wallClass == 3) {
+                        intersects = true;
+                    } else {
+                        interferes = true;
+
+                    }
                 }
 
-                let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, 0.1);
+            };
 
 
-                if (this.center.dist(point) < max) {
+            let propagationDirection = p5.Vector.fromAngle(i * 2 * PI / WAVE_ANGULAR_RES, 0.05);
+
+            if (!intersects) {
+
+                if (!interferes && this.center.dist(point) < this.maxRadius) {
+                    point.add(propagationDirection)
+                    propagates = true;
+                } else if (interferes && this.center.dist(point) < (this.maxRadius/3)) {
                     point.add(propagationDirection)
                     propagates = true;
                 }
             }
 
-        });
+            
+
+
+
+        }
+
+        if (!propagates) {
+            this.toDelete = true;
+        }
+    }
+
+    show() {
 
         if (this.intersection) {
             stroke(238, 244, 66);
@@ -66,10 +93,6 @@ class Wave {
         });
 
         endShape(CLOSE);
-
-        if (!propagates) {
-            this.toDelete = true;
-        }
     }
 
     intersects(pos) {
