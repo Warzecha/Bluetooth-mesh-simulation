@@ -25,13 +25,8 @@ class Node {
         this.currentResendCount = 0;
         this.currentMsgId = -1;
         this.currentMsgTarget = -1;
-
         this.nextResendIn = 0;
-
         this.consumedMessages = new Set();
-
-        this.showSender = 0;
-
     }
 
     show() {
@@ -53,7 +48,6 @@ class Node {
             textSize(12);
             text("R", this.pos.x * PIXELS_PER_METER + 9, this.pos.y * PIXELS_PER_METER + 4)
         }
-
 
     }
 
@@ -100,10 +94,6 @@ class Node {
 
     }
 
-    getPositionVector() {
-        return this.pos;
-    }
-
     processWaves(waves) {
 
         waves.forEach(wave => {
@@ -111,12 +101,12 @@ class Node {
 
             if (wave.intersects(this.pos)) {
 
-                if (wave.targetId == this.id) {
+                if (wave.targetId === this.id) {
 
                     if (!this.consumedMessages.has(wave.id)) {
                         console.log("RECEIVED!")
-                        this.consumedMessages.add(wave.id)
-                        Node.receivers.delete(wave.targetId)
+                        this.consumedMessages.add(wave.id);
+                        Node.receivers.delete(wave.targetId);
                         Node.receivedCount++;
 
 
@@ -127,7 +117,7 @@ class Node {
 
 
                 if (this.isRelay) {
-                    if (this.freeze == 0) {
+                    if (this.freeze === 0) {
 
                         if (wave.ttl > 0) {
 
@@ -152,8 +142,8 @@ class Node {
 
         let newWave = new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId, this.bluetoothClass);
 
-        append(waves, newWave)
-        this.queue.push(newWave.id)
+        append(waves, newWave);
+        this.queue.push(newWave.id);
 
         return toSend.id;
     }
@@ -172,9 +162,9 @@ class Node {
 
     resendPrevMsg() {
 
-        if (this.nextResendIn == 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId != -1) {
+        if (this.nextResendIn === 0 && this.currentResendCount < this.maxResendCount && this.currentMsgId !== -1) {
 
-            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, TTL, this.currentMsgTarget, this.bluetoothClass))
+            this.sendWave(waves, new Wave(this.pos.x, this.pos.y, this.currentMsgId, TTL, this.currentMsgTarget, this.bluetoothClass));
 
             this.nextResendIn = Math.floor(Math.random() * 1000);
             this.currentResendCount += 1;

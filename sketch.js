@@ -123,8 +123,9 @@ function draw() {
     noStroke();
     textSize(32);
     textAlign(LEFT);
-    text('Received ratio: ' + Math.round(Node.receivedCount * 100 / Node.sentCount) + '%', 50, windowHeight - 50);
-
+    if (Node.sentCount !== 0) {
+        text('Received ratio: ' + Math.round(Node.receivedCount * 100 / Node.sentCount) + '%', 50, windowHeight - 50);
+    }
 
 }
 
