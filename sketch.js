@@ -2,9 +2,18 @@ let nodes = [];
 let walls = [];
 let waves = [];
 
+let overNode = false;
+let currentNodeOver = null;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    input = createInput();
+    input.position(windowWidth - 200, windowHeight - 50);
+    input.size(30, 10);
+    input.value(0);
+    button = createButton('Add random nodes');
+    button.position(input.x + input.width + 5, windowHeight - 50);
+    button.mousePressed(addRandomNodes);
 
     //OUTER WALLS
     append(walls, new Wall(createVector(1, 1), createVector(70, 4), 3));
@@ -62,37 +71,10 @@ function setup() {
     append(walls, new Wall(createVector(10, 26), createVector(10, 29), 2));
     append(walls, new Wall(createVector(10, 29), createVector(10, 33), 2));
 
-
-    //  USED FOR TESTING
-    // append(nodes, new Node(15, 15, 1, false));
-    // append(nodes, new Node(14, 10, 1, false));
-    // append(nodes, new Node(14, 15, 1, false));
-    // append(nodes, new Node(14, 20, 1, false));
-    // append(nodes, new Node(14, 25, 1, false));
-    // append(nodes, new Node(14, 30, 1, false));
-
-
-    for (let i = 0; i < STATIC_NODE_COUNT; i++) {
-        const x = random(2, 58);
-        const y = random(4, 33);
-
-
-        append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), false));
-    }
-
-
-    for (let i = 0; i < MOBILE_NODE_COUNT; i++) {
-        const x = random(2, 58);
-        const y = random(4, 33);
-
-        append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), true));
-    }
-
 }
 
 function draw() {
     background(51);
-
     waves.forEach(wave => {
         wave.update(walls);
         wave.show();
@@ -130,11 +112,76 @@ function draw() {
 }
 
 
-function mouseClicked() {
+function mousePressed() {
+    nodes.forEach(node => {
+        if (Math.abs(mouseX / PIXELS_PER_METER - node.pos.x) < 30 / PIXELS_PER_METER &&
+            Math.abs(mouseY / PIXELS_PER_METER - node.pos.y) < 30 / PIXELS_PER_METER) {
+            overNode = true;
+            currentNodeOver = node;
+            if (!node.isRelay && !node.mobile) {
+                node.isRelay = true;
+            } else if (node.isRelay && !node.mobile) {
+                node.mobile = true;
+            } else if (node.isRelay && node.mobile) {
+                node.isRelay = false;
+                node.mobile = false;
+            }
+            node.updateStatus();
+        }
+    });
 
-    let randomIndex = Math.floor(Math.random() * nodes.length);
-    let randomNode = nodes[randomIndex];
-    randomNode.sendNewWave(waves);
+    if (!overNode && (mouseX <= windowWidth - 235 || mouseY <= windowHeight - 70)) {
+        append(nodes, new Node(mouseX / PIXELS_PER_METER, mouseY / PIXELS_PER_METER, Math.floor(Math.random() * 3 + 1), false, false));
+    }
+}
 
-    console.log(Node.receivers)
+function keyPressed() {
+    if (nodes.length !== 0) {
+        if (keyCode === ENTER) {
+            let randomIndex = Math.floor(Math.random() * nodes.length);
+            let randomNode = nodes[randomIndex];
+            randomNode.sendNewWave(waves);
+        }
+
+    }
+}
+
+function mouseDragged() {
+    if (overNode) {
+        currentNodeOver.pos.x = mouseX / PIXELS_PER_METER;
+        currentNodeOver.pos.y = mouseY / PIXELS_PER_METER;
+        currentNodeOver.isRelay = false;
+        currentNodeOver.mobile = false;
+    }
+
+}
+
+function mouseReleased() {
+    overNode = false;
+    currentNodeOver = null;
+}
+
+function addRandomNodes() {
+
+    let allNodes = STATIC_NODE_COUNT + MOBILE_NODE_COUNT;
+
+    let staticNodes = Math.round(input.value() * (STATIC_NODE_COUNT / allNodes));
+    let mobileNodes = input.value() - staticNodes;
+
+    for (let i = 0; i < staticNodes; i++) {
+        const x = random(2, 58);
+        const y = random(4, 33);
+
+
+        append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), false, Math.random() <= RELAY_RATIO));
+    }
+
+
+    for (let i = 0; i < mobileNodes; i++) {
+        const x = random(2, 58);
+        const y = random(4, 33);
+
+        append(nodes, new Node(x, y, Math.floor(Math.random() * 3 + 1), true, Math.random() <= RELAY_RATIO));
+    }
+
 }
