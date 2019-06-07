@@ -1,6 +1,6 @@
 class Node {
 
-    constructor(x, y, bluetoothClass, mobile) {
+    constructor(x, y, bluetoothClass, mobile, isRelay) {
 
         this.id = Node.count++;
 
@@ -8,7 +8,7 @@ class Node {
         this.bluetoothClass = bluetoothClass;
         this.mobile = mobile;
 
-        this.isRelay = Math.random() <= RELAY_RATIO;
+        this.isRelay = isRelay;
         this.queue = new Queue(10);
 
         if (mobile) {
@@ -27,6 +27,7 @@ class Node {
         this.currentMsgTarget = -1;
         this.nextResendIn = 0;
         this.consumedMessages = new Set();
+        this.toReset = false;
     }
 
     show() {
@@ -35,7 +36,9 @@ class Node {
         if (Node.receivers.has(this.id)) {
             fill(255, 100, 100);
         } else {
-            fill(255);
+            if (this.mobile) {
+                fill(209, 207, 175)
+            } else fill(255);
         }
         stroke(255, 255, 255);
         ellipse(this.pos.x * PIXELS_PER_METER, this.pos.y * PIXELS_PER_METER, 30);
@@ -94,6 +97,16 @@ class Node {
 
     }
 
+    updateStatus() {
+        if (this.mobile) {
+            this.maxSpeed = 0.5;
+            this.direction = p5.Vector.random2D().normalize().mult(this.maxSpeed)
+        } else {
+            this.maxSpeed = 0;
+            this.direction = createVector(0, 0);
+        }
+    }
+
     processWaves(waves) {
 
         waves.forEach(wave => {
@@ -104,7 +117,7 @@ class Node {
                 if (wave.targetId === this.id) {
 
                     if (!this.consumedMessages.has(wave.id)) {
-                        console.log("RECEIVED!")
+                        console.log("RECEIVED!");
                         this.consumedMessages.add(wave.id);
                         Node.receivers.delete(wave.targetId);
                         Node.receivedCount++;
