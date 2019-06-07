@@ -27,6 +27,7 @@ class Node {
         this.currentMsgTarget = -1;
         this.nextResendIn = 0;
         this.consumedMessages = new Set();
+        this.toReset = false;
     }
 
     show() {

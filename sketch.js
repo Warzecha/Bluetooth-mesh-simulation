@@ -118,13 +118,19 @@ function mousePressed() {
             Math.abs(mouseY / PIXELS_PER_METER - node.pos.y) < 30 / PIXELS_PER_METER) {
             overNode = true;
             currentNodeOver = node;
-            if (!node.isRelay && !node.mobile) {
-                node.isRelay = true;
-            } else if (node.isRelay && !node.mobile) {
-                node.mobile = true;
-            } else if (node.isRelay && node.mobile) {
-                node.isRelay = false;
+            if (node.toReset) {
                 node.mobile = false;
+                node.toReset = false;
+            }
+            else {
+                if (!node.isRelay && !node.mobile) {
+                    node.isRelay = true;
+                } else if (node.isRelay && !node.mobile) {
+                    node.mobile = true;
+                } else if (node.isRelay && node.mobile) {
+                    node.isRelay = false;
+                    node.toReset = true;
+                }
             }
             node.updateStatus();
         }
