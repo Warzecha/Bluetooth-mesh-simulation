@@ -102,7 +102,7 @@ Kolejne punkty znajdują się w środkowej schodka po lewej lub prawej.
 
 Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału. Jednak jeśli umiejętnie postawi się węzeł moc spada nieznacznie i komunikacja w drodze parter-półpiętro-piętro, możliwy jest w miarę bez zakłóceń. W przypadku montażu urządzeń na suficie i ścianie ok 3 m nad poziomem półpiętra powinno wyeliminować problem z przeszkodami w postaci ludzi czy barierek.
 
-### Wnioski
+### Wnioski pomiarów
 
 - Ściany między pokojami są grube (ok 20-30cm) oraz zrobione z betonu prawdopodobnie zbrojonego. Urządzenia znajdujące się w dwóch sąsiednich pokojach nie potrafią się między sobą skomunikować.
 
@@ -113,3 +113,14 @@ Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału.
 - Rozwiązaniem, które powinno spełniać oczekiwania są węzły umieszczone na korytarzach i to przez nie będzie prowadzona komunikacja w całym budynku. Sygnał w linii prostej w korytarzu może rozchodzić się na 25 m więc węzły w korytarzu mogą być rzadsze, jednak przy dużej ilości zakrętów czy zakłóceń (szafy elektryczne itp) powinny być gęściej. 
 
 - Na klatce schodowej sygnał rozchodzi się poprawnie.
+
+
+### Wnioski ogólne
+
+- Rozmieszczenie przekaźników ma kluczowe znaczenie dla jakości sieci.
+
+- Zagęszczenie fal powoduje znaczne spadki jakości sieci bluetooth.
+
+- Nie ma jednego "dobrego" schematu umiejscowienia przekaźników.
+
+- Rozwój technologi może w przyszłości się skutecznie sprawdzać w tzw."Smart Home"
