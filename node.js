@@ -154,11 +154,18 @@ class Node {
         this.freeze = 3;
 
         let newWave = new Wave(this.pos.x, this.pos.y, toSend.id, toSend.ttl - 1, toSend.targetId, this.bluetoothClass);
+                    
+        if (this.isOnStairs()) {
+            let blClass = constrain(this.bluetoothClass + 1, 1, 3)
+            append(waves, new Wave(this.pos.x, this.pos.y + FLOOR_V_OFFSET, newWave.id, TTL, this.currentMsgTarget, blClass));            
+            append(waves, new Wave(this.pos.x, this.pos.y - FLOOR_V_OFFSET, newWave.id, TTL, this.currentMsgTarget, blClass)); 
+        }
+
 
         append(waves, newWave);
         this.queue.push(newWave.id);
 
-        return toSend.id;
+        return newWave.id;
     }
 
     sendNewWave(waves, nodes) {
@@ -167,8 +174,9 @@ class Node {
                 this.currentMsgTarget = Math.floor(Math.random() * Node.count);
             } while (this.currentMsgTarget === this.id);
 
+            
             let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, TTL, this.currentMsgTarget, this.bluetoothClass));
-
+            
             this.currentMsgId = id;
             Node.sentCount++;
             Node.receivers.add(this.currentMsgTarget);
@@ -190,6 +198,17 @@ class Node {
         }
 
     }
+
+    isOnStairs() {
+
+        let simplifiedX = this.pos.x
+        let simplifiedY = this.pos.y % FLOOR_V_OFFSET;
+
+        let onRightStaircase = (isValueInRange(simplifiedX, 60, 70) && isValueInRange(simplifiedY, 25, 33)) 
+        let onLeftStaircase = (isValueInRange(simplifiedX, 11, 21) && isValueInRange(simplifiedY, 25, 33)) 
+        return onRightStaircase || onLeftStaircase;
+    }
+
 
 }
 
