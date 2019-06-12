@@ -161,16 +161,21 @@ class Node {
         return toSend.id;
     }
 
-    sendNewWave(waves) {
-        this.currentMsgTarget = Math.floor(Math.random() * Node.count);
-        let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, TTL, this.currentMsgTarget, this.bluetoothClass));
+    sendNewWave(waves, nodes) {
+        if (nodes.length > 1) {
+            do {
+                this.currentMsgTarget = Math.floor(Math.random() * Node.count);
+            } while (this.currentMsgTarget === this.id);
 
-        this.currentMsgId = id;
-        Node.sentCount++;
-        Node.receivers.add(this.currentMsgTarget);
+            let id = this.sendWave(waves, new Wave(this.pos.x, this.pos.y, undefined, TTL, this.currentMsgTarget, this.bluetoothClass));
+
+            this.currentMsgId = id;
+            Node.sentCount++;
+            Node.receivers.add(this.currentMsgTarget);
 
 
-        this.nextResendIn = Math.floor(Math.random() * 100);
+            this.nextResendIn = Math.floor(Math.random() * 100);
+        }
     }
 
     resendPrevMsg() {
