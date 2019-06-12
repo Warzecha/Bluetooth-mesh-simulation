@@ -56,8 +56,10 @@ function draw() {
 
 }
 
-
 function mousePressed() {
+    console.log("X: ", mouseX / PIXELS_PER_METER)
+    console.log("Y: ", mouseY / PIXELS_PER_METER)
+    
     nodes.forEach(node => {
         if (Math.abs(mouseX / PIXELS_PER_METER - node.pos.x) < 30 / PIXELS_PER_METER &&
             Math.abs(mouseY / PIXELS_PER_METER - node.pos.y) < 30 / PIXELS_PER_METER) {
@@ -91,7 +93,7 @@ function keyPressed() {
         if (keyCode === ENTER) {
             let randomIndex = Math.floor(Math.random() * nodes.length);
             let randomNode = nodes[randomIndex];
-            randomNode.sendNexwWave(waves, nodes);
+            randomNode.sendNewWave(waves, nodes);
         }
 
     }
@@ -128,9 +130,6 @@ function addRandomNodes() {
     let staticNodes = Math.round(input.value() * (STATIC_NODE_COUNT / allNodes));
     let mobileNodes = input.value() - staticNodes;
 
-
-    console.log("Floor ", floor)
-    
     for (let i = 0; i < staticNodes; i++) {
         let floor = Math.floor(random(0, 2));
         const x = random(2, 58);
