@@ -91,7 +91,7 @@ function keyPressed() {
         if (keyCode === ENTER) {
             let randomIndex = Math.floor(Math.random() * nodes.length);
             let randomNode = nodes[randomIndex];
-            randomNode.sendNexwWave(waves, nodes);
+            randomNode.sendNewWave(waves, nodes);
         }
 
     }
