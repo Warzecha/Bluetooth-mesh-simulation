@@ -15,6 +15,15 @@ Zmianę parametrów można dokonać modyfikują plik config.js
 - **“Flooding with restricted relaying”**: “Flooding” jest najprostszym i bezpośrednim sposobem na propagację wiadomości w sieci wykorzystującej nadawanie rozgłaszania. Gdy urządzenie nada wiadomość, ta może zostać odebrana przez wiele przekaźników, które podadzą ją dalej. (Rozproszona) sieć bluetooth korzysta z zasad, które zabraniają urządzeniom na ponowne przekazanie ostatnio otrzymanych wiadomości aby zapobiec wyścigom przesłaniu wiadomości wieloma drogami.
 - **Oszczędność mocy z wykorzystaniem “friendship”**: Urządzenia, wykorzystujące systemy “low-power” mogą współpracować z urządzeniami typu “always-on”, które będą przechowywać i przekazywać dalej wiadomości w ich imieniu, wykorzystując system znany jako “friendship”. Wspomniana technologia to specjalne połączenie pomiędzy węzłem “low-power” i węzłem zaprzyjaźnionym. Tworzenie tego połączenia rozpoczyna się od urządzenia “low power”. Po połączeniu węzeł zaprzyjaźniony odbywa operacje, które pozwalają na zmniejszenie (ilości) energii wykorzystywanej na węzłach “low-power”. “Zaprzyjaźniony” węzeł wykorzystuje dane tymczasowe, które przechowują wszystkie wiadomości wystosowane do urządzenia “low-power” i dostarcza je do niego w razie potrzeby. Dodatkowo zaprzyjaźniony węzeł przesyła łatki bezpieczeństwa, wystosowane do węzła “low-power”.
 
+Schemat:
+
+![Obraz 1](/images/image1.jpg)
+
+"Friendship":
+
+![Obraz 2](/images/image2.jpg)
+
+
 ### Pomiary
 
 Jako rzeczywisty budynek do naszego projektu wybraliśmy Centrum Energetyki AGH przy ulicy Czarnowiejskiej 30. Ma on 95 m długości i 18 m szerokości co daje 6840 m^2 na czterech rozpatrywanych przez nas piętrach. Budynek ten pełni funkcje biurowe i laboratoryjne więc uważamy, że bardzo dobrze nadaje się na wzór do symulacji sieci bluetooth mesh.
