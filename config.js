@@ -1,7 +1,7 @@
 const MAX_DIST = 100;
 const WIDTH = 80;
 const HEIGHT = 40;
-const PIXELS_PER_METER = 20;
+const PIXELS_PER_METER = 10;
 
 const WAVE_ANGULAR_RES = 20;
 
