@@ -59,7 +59,7 @@ function draw() {
 function mousePressed() {
     console.log("X: ", mouseX / PIXELS_PER_METER)
     console.log("Y: ", mouseY / PIXELS_PER_METER)
-    
+
     nodes.forEach(node => {
         if (Math.abs(mouseX / PIXELS_PER_METER - node.pos.x) < 30 / PIXELS_PER_METER &&
             Math.abs(mouseY / PIXELS_PER_METER - node.pos.y) < 30 / PIXELS_PER_METER) {
@@ -100,6 +100,12 @@ function keyPressed() {
 
     if (key === "Z") {
         walls = [];
+    }
+
+    if (key === "R") {
+        Node.receivedCount = 0;
+        Node.sentCount = 0;
+        Node.receivers = new Set();
     }
 
     if (key === "X") {
@@ -182,7 +188,7 @@ function insertWalls(level) {
     //extra
     append(walls, new Wall(createVector(1, 15 + offset), createVector(10, 15 + offset), 2));
     append(walls, new Wall(createVector(10, 15 + offset), createVector(10, 12 + offset), 2));
-    append(walls, new Wall(createVector(10, 9 + offset), createVector(10, 1.6  + offset), 2));
+    append(walls, new Wall(createVector(10, 9 + offset), createVector(10, 1.6 + offset), 2));
 
 
     //INNER WALLS UP
@@ -213,6 +219,6 @@ function insertWalls(level) {
 
 function insertFloors(levels) {
     for (let i = 0; i < levels; i++) {
-        insertWalls(i);        
+        insertWalls(i);
     }
 }
