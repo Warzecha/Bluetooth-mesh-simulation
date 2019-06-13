@@ -104,7 +104,13 @@ Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału.
 
 ### Walidacja
 
+Pomiar z urządzenia ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 50m (w taki sposób: Redmi -25m- pomiar -25m- HUAWEI P9 lite):
 
+![Demo 6](/images/25.png)
+
+Pomiar z urządzenia ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 64m (w taki sposób: Redmi -32m- pomiar -32m- HUAWEI P9 lite):
+
+![Demo 6](/images/32.png)
 
 ### Wnioski pomiarów
 
