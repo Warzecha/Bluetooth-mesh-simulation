@@ -106,7 +106,7 @@ Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału.
 
 Pomiar z urządzenia Galaxy A5 (2017) ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 50m (w taki sposób: Redmi -25m- pomiar -25m- HUAWEI P9 lite):
 
-![Demo 7](/images/25.jpg)
+![Obraz 3](/images/25.jpg)
 
 Inny pomiar z urządzenia Galaxy A5 (2017) ustawionego pomiędzy duckietown i HUAWEI P9 lite które były od siebie oddalone o 50m (w taki sposób: duckietown -25m- pomiar -25m- HUAWEI P9 lite):
 
