@@ -104,13 +104,31 @@ Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału.
 
 ### Walidacja
 
-Pomiar z urządzenia ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 50m (w taki sposób: Redmi -25m- pomiar -25m- HUAWEI P9 lite):
+Pomiar z urządzenia Galaxy A5 (2017) ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 50m (w taki sposób: Redmi -25m- pomiar -25m- HUAWEI P9 lite):
 
 ![Demo 7](/images/25.jpg)
 
-Pomiar z urządzenia ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 64m (w taki sposób: Redmi -32m- pomiar -32m- HUAWEI P9 lite):
+Inny pomiar z urządzenia Galaxy A5 (2017) ustawionego pomiędzy duckietown i HUAWEI P9 lite które były od siebie oddalone o 50m (w taki sposób: duckietown -25m- pomiar -25m- HUAWEI P9 lite):
 
-![Demo 8](/images/32.jpg)
+![Demo 8](/images/sr25_1.jpg)
+
+![Demo 9](/images/sr25_2.jpg)
+
+Pomiar z urządzenia Galaxy A5 (2017) ustawionego pomiędzy Redmi i HUAWEI P9 lite które były od siebie oddalone o 64m (w taki sposób: Redmi -32m- pomiar -32m- HUAWEI P9 lite):
+
+![Demo 10](/images/32.jpg)
+
+Moc sygnału dla ok 70m:
+
+![Demo 11](/images/naj_odl.jpg)
+
+Pomiar z urządzenia Redmi oddalonego od Galaxy A5 (2017) o 25m i od HUAWEI P9 lite o 50m (w taki sposób: Redmi -25m- Galaxy A5 (2017) -25m- HUAWEI P9 lite):
+
+![Demo 12](/images/32.jpg)
+
+Pomiar przez szybę:
+
+![Demo 13](/images/szyba.jpg)
 
 ### Wnioski pomiarów
 
