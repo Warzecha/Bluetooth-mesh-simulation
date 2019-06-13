@@ -124,7 +124,7 @@ Moc sygnału dla ok 70m:
 
 Pomiar z urządzenia Redmi oddalonego od Galaxy A5 (2017) o 25m i od HUAWEI P9 lite o 50m (w taki sposób: Redmi -25m- Galaxy A5 (2017) -25m- HUAWEI P9 lite):
 
-![Demo 12](/images/32.jpg)
+![Demo 12](/images/1.jpg)
 
 Pomiar przez szybę:
 
