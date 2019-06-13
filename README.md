@@ -102,6 +102,10 @@ Kolejne punkty znajdują się w środkowej schodka po lewej lub prawej.
 
 Widać że metalowe barierki stanowią poważną przeszkodą na drodze sygnału. Jednak jeśli umiejętnie postawi się węzeł moc spada nieznacznie i komunikacja w drodze parter-półpiętro-piętro, możliwy jest w miarę bez zakłóceń. W przypadku montażu urządzeń na suficie i ścianie ok 3 m nad poziomem półpiętra powinno wyeliminować problem z przeszkodami w postaci ludzi czy barierek.
 
+### Walidacja
+
+
+
 ### Wnioski pomiarów
 
 - Ściany między pokojami są grube (ok 20-30cm) oraz zrobione z betonu prawdopodobnie zbrojonego. Urządzenia znajdujące się w dwóch sąsiednich pokojach nie potrafią się między sobą skomunikować.
