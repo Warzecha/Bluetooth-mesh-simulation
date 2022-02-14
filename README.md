@@ -3,6 +3,8 @@
 
 W opisywanym projekcie zajęliśmy się tematem (rozproszonej) sieci Bluetooth w ramach zajęć symulacji procesów dyskretnych.
 
+![Bluetooth simulation](https://github.com/Warzecha/Bluetooth-mesh-simulation/blob/502b9848953883f8b38e6125019b5d91dbd2efa2/images/preview_2.png)
+
 ### Instukcja
 Aby rozpocząć wystarczy uruchomić plik index.html.
 Zmianę parametrów można dokonać modyfikują plik config.js
